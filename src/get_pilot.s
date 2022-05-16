@@ -69,11 +69,12 @@ get_pilot_array_end:
 .type get_pilot, @function
 get_pilot:
     mov $get_pilot_array_end, %ebx # metto in ebx l'indirizzo del puntatore all'ultima stringa
+    mov $10, %edx # \n per la comparazione tra stringhe
 
 get_pilot_while:
     mov (%ebx), %eax # metto in eax l'indirizzo della stringa puntata da ebx
     call strings_are_equal # faccio la compare tra %esi ed %eax
-    cmp $0, %eax # se ritorna 0 ho trovato il mio pilota
+    cmp $0, %ecx # se ritorna 0 ho trovato il mio pilota
     je get_pilot_trovato
 
     sub $4, %ebx # arretro il puntatore
@@ -86,9 +87,6 @@ get_pilot_while:
 
 get_pilot_trovato:
     mov $0, %eax
-    # avanzo esi eliminando la prima riga
-    add %ecx, %esi
-    inc %esi
     # ricavo l'id in ebx
     sub $get_pilot_array, %ebx # sottraggo l'inizio
     shr $2, %ebx # divido per sizeof (shift di 2)
