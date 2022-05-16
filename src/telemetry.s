@@ -7,10 +7,30 @@ invalid_pilot_str:
 .section .text
     .global telemetry
 telemetry:
-    mov 4(%esp), %esi
-    mov 8(%esp), %edi
+    # salvo il valore di ebp
+    push %ebp
+    mov %esp, %ebp
+    # salvo gli altri registri
+    push %eax
+    push %ebx
+    push %ecx
+    push %edx
+    push %esi
+    push %edi
+    
+    # +4 perchè c'è anche ebp
+    mov 8(%ebp), %esi
+    mov 12(%ebp), %edi
 
-    call get_pilot
+    call get_pilot # ho l'id pilota in ecx
 
-    mov $0, %eax
+    # ripristino i registri
+    pop %edi
+    pop %esi
+    pop %edx
+    pop %ecx
+    pop %ebx
+    pop %eax
+    # ripristino ebp (e anche esp)
+    pop %ebp
     ret
