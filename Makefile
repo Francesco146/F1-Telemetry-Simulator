@@ -5,7 +5,7 @@ OBJDIR := obj
 BINDIR := bin
 SRCDIR := src
 
-_OBJ := strings_are_equal.o get_pilot.o telemetry.o main.o
+_OBJ := next_line.o strings_are_equal.o get_pilot.o telemetry.o main.o
 OBJ := $(addprefix $(OBJDIR)/,$(_OBJ))
 
 .PHONY: all clean

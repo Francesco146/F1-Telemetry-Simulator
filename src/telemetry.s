@@ -23,6 +23,7 @@ telemetry:
     mov 12(%ebp), %edi
 
     call get_pilot # ho l'id pilota in ecx
+    call next_line
 
     # ripristino i registri
     pop %edi
