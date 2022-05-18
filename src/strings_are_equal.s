@@ -9,8 +9,8 @@ strings_are_equal:
     push %edx
     xor %ecx, %ecx
 strings_are_equal_while:
-    movzbl (%eax, %ecx, 1), %ebx
-    movzbl (%esi, %ecx, 1), %edx
+    mov (%eax, %ecx, 1), %bl
+    mov (%esi, %ecx, 1), %dl
     cmp $0, %bl
     je strings_are_equal_maybe # se sono a fine stringa controllo che l'altra abbia \n
     cmp %bl, %dl
