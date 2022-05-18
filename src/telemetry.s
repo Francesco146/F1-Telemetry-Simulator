@@ -18,17 +18,19 @@ telemetry:
     push %esi
     push %edi
     
-    # +4 perchè c'è anche ebp
-    mov 8(%ebp), %esi
-    mov 12(%ebp), %edi
+    mov 8(%ebp), %esi # carico l'input in esi
 
     call get_pilot # ho l'id pilota in ebx
     cmp $0, %ebx
     jl invalid
 
-    # int2str in pilot_id
+    lea pilot_id, %edi # carico in edi l'indirizzo di destinazione
+    call int2str # converto l'id in ebx in stringa
+    lea pilot_id, %eax # carico in %EAX l'indirizzo dell'id
 
-    call next_line
+    mov 12(%ebp), %edi # carico l'output in edi
+
+    call next_line # consumo la riga con il nome pilota
 while_telemetry:
     # controlla se il pilota è valido
     # elabora la riga
@@ -44,6 +46,7 @@ while_telemetry:
 
     jmp fine
 invalid:
+    mov 12(%ebp), %edi # carico l'output in edi
     # printo pilota non valido
 fine:
     # ripristino i registri
