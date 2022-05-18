@@ -26,8 +26,22 @@ telemetry:
     cmp $0, %ebx
     jl invalid
 
+    # int2str in pilot_id
+
     call next_line
-    # elaborazione dei dati
+while_telemetry:
+    # controlla se il pilota è valido
+    # elabora la riga
+
+    # altrimenti passa alla prossima riga
+    call next_line
+
+    mov (%esi), %bl # controllo se sono a fine input
+    cmp $0, %bl
+    jne while_telemetry
+
+    # output di avg e max
+
     jmp fine
 invalid:
     # printo pilota non valido
