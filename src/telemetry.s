@@ -22,9 +22,16 @@ telemetry:
     mov 8(%ebp), %esi
     mov 12(%ebp), %edi
 
-    call get_pilot # ho l'id pilota in ecx
-    call next_line
+    call get_pilot # ho l'id pilota in ebx
+    cmp $0, %ebx
+    jl invalid
 
+    call next_line
+    # elaborazione dei dati
+    jmp fine
+invalid:
+    # printo pilota non valido
+fine:
     # ripristino i registri
     pop %edi
     pop %esi

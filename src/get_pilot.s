@@ -81,12 +81,11 @@ get_pilot_while:
     cmp $get_pilot_array, %ebx # controllo se mi rimangono stringhe
     jge get_pilot_while
 
-    # se arrivo a fine ciclo segnalo 1
-    mov $1, %eax
+    # se arrivo a fine ciclo segnalo -1 (non trovato)
+    mov $-1, %ebx
     jmp get_pilot_fine
 
 get_pilot_trovato:
-    mov $0, %eax
     # ricavo l'id in ebx
     sub $get_pilot_array, %ebx # sottraggo l'inizio
     shr $2, %ebx # divido per sizeof (shift di 2)
