@@ -32,9 +32,13 @@ telemetry:
 
     call next_line # consumo la riga con il nome pilota
 while_telemetry:
-    # controlla se il pilota è valido
-    # elabora la riga
+    call is_my_pilot # controllo se è il pilota interessato
+    cmp $0, %ecx
+    jne next_line_telemetry
 
+    # elabora la riga
+    # call elabora
+next_line_telemetry:
     # altrimenti passa alla prossima riga
     call next_line
 
