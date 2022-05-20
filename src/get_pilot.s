@@ -66,28 +66,27 @@ get_pilot_array_end:
 .section .text
     .global get_pilot
 
+# Ricava l'id del pilota associato al nome presente nella riga corrente
+# Output in %EBX
 .type get_pilot, @function
 get_pilot:
-    mov $get_pilot_array_end, %ebx # metto in ebx l'indirizzo del puntatore all'ultima stringa
-    mov $10, %edx # \n per la comparazione tra stringhe
+    lea get_pilot_array_end, %ebx # metto in %EBX l'indirizzo del puntatore all'ultima stringa
+    mov $10, %dl                  # \n per il fine riga
 
 get_pilot_while:
-    mov (%ebx), %eax # metto in eax l'indirizzo della stringa puntata da ebx
-    call strings_are_equal # faccio la compare tra %esi ed %eax
-    cmp $0, %ecx # se ritorna 0 ho trovato il mio pilota
+    mov (%ebx), %eax             # metto in %EAX l'indirizzo della stringa puntata da %EBX
+    call are_strings_equal       # confronto %ESI ed %EAX
+    cmp $1, %ecx                 # se ritorna 1 ho trovato il mio pilota
     je get_pilot_trovato
 
-    sub $4, %ebx # arretro il puntatore
-    cmp $get_pilot_array, %ebx # controllo se mi rimangono stringhe
+    sub $4, %ebx                 # altrimenti decremento il puntatore
+    cmp $get_pilot_array, %ebx   # controllo se mi rimangono stringhe
     jge get_pilot_while
 
-    # se arrivo a fine ciclo segnalo -1 (non trovato)
-    mov $-1, %ebx
-    jmp get_pilot_fine
-
-get_pilot_trovato:
-    # ricavo l'id in ebx
-    sub $get_pilot_array, %ebx # sottraggo l'inizio
-    shr $2, %ebx # divido per sizeof (shift di 2)
-get_pilot_fine:
+    mov $-1, %ebx                # pilota non trovato
+    jmp get_pilot_end
+get_pilot_trovato:                # ricavo l'id in %EBX
+    sub $get_pilot_array, %ebx    # sottraggo l'inizio
+    shr $2, %ebx                  # divido per sizeof (shift di 2)
+get_pilot_end:
     ret

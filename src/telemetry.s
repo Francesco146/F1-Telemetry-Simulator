@@ -7,59 +7,55 @@ invalid_pilot_str:
 .section .text
     .global telemetry
 telemetry:
-    # salvo il valore di ebp
-    push %ebp
+    push %ebp               # salvo il valore di %EBP
     mov %esp, %ebp
-    # salvo gli altri registri
-    push %eax
+    push %eax               # salvo gli altri registri
     push %ebx
     push %ecx
     push %edx
     push %esi
     push %edi
-    
-    mov 8(%ebp), %esi # carico l'input in esi
 
-    call get_pilot # ho l'id pilota in ebx
+    mov 8(%ebp), %esi       # carico l'input in %ESI
+
+    call get_pilot          # ricavo l'id pilota in %EBX
     cmp $0, %ebx
-    jl invalid
+    jl telemetry_invalid
 
-    lea pilot_id, %edi # carico in edi l'indirizzo di destinazione
-    call int2str # converto l'id in ebx in stringa
-    lea pilot_id, %eax # carico in %EAX l'indirizzo dell'id
+    lea pilot_id, %edi      # carico in %EDI l'indirizzo di destinazione
+    call int2str            # converto l'id in stringa
+    lea pilot_id, %eax      # ri-carico in %EAX l'indirizzo della stringa
 
-    mov 12(%ebp), %edi # carico l'output in edi
+    call next_line          # consumo la riga con il nome pilota
 
-    call next_line # consumo la riga con il nome pilota
-while_telemetry:
-    call is_my_pilot # controllo se è il pilota interessato
+    mov 12(%ebp), %edi      # carico l'output in %EDI
+    mov $44, %dl            # in %DL il separatore dei campi
+telemetry_while:
+    call is_my_pilot        # se è il pilota monitorato
     cmp $0, %ecx
-    jne next_line_telemetry
+    jz telemetry_next_line
 
-    # elabora la riga
-    # call elabora
-next_line_telemetry:
-    # altrimenti passa alla prossima riga
-    call next_line
-
-    mov (%esi), %bl # controllo se sono a fine input
+    # call                  # elaboro la riga corrente
+    jmp telemetry_line_done
+telemetry_next_line:
+    call next_line          # altrimenti passo alla riga successiva
+telemetry_line_done:
+    mov (%esi), %bl         # controllo se sono a fine input
     cmp $0, %bl
-    jne while_telemetry
+    jne telemetry_while
 
-    # output di avg e max
+    # call                  # stampo massimi e media
 
-    jmp fine
-invalid:
-    mov 12(%ebp), %edi # carico l'output in edi
-    # printo pilota non valido
-fine:
-    # ripristino i registri
-    pop %edi
+    jmp telemetry_end
+telemetry_invalid:
+    mov 12(%ebp), %edi      # carico l'output in %EDI
+                            # stampo pilota non valido
+telemetry_end:
+    pop %edi                # ripristino i registri
     pop %esi
     pop %edx
     pop %ecx
     pop %ebx
     pop %eax
-    # ripristino ebp (e anche esp)
-    pop %ebp
+    pop %ebp                # ripristino %EBP (e anche %ESP)
     ret
