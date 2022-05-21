@@ -3,6 +3,17 @@ pilot_id:
     .string "\0\0\0"
 invalid_pilot_str:	
     .string "Invalid\0"
+    
+counter_speed: .long 0
+.global counter_speed
+sum_speed: .long 0
+.global sum_speed
+max_speed: .long 0
+.global max_speed
+max_rmp: .long 0
+.global max_rmp
+max_temp: .long 0
+.global max_temp
 
 .section .text
     .global telemetry
@@ -44,7 +55,7 @@ telemetry_line_done:
     cmp $0, %bl
     jne telemetry_while
 
-    # call                  # stampo massimi e media
+    call output_max_avg     # stampo massimi e media
 
     jmp telemetry_end
 telemetry_invalid:
