@@ -2,7 +2,7 @@
 pilot_id:
     .string "\0\0\0"
 invalid_pilot_str:	
-    .string "Invalid\0"
+    .string "Invalid\n\0"
     
 counter_speed: .long 0
 .global counter_speed
@@ -61,6 +61,14 @@ telemetry_line_done:
 telemetry_invalid:
     mov 12(%ebp), %edi      # carico l'output in %EDI
                             # stampo pilota non valido
+    lea invalid_pilot_str, %eax
+telemetry_invalid_while:
+    mov (%eax), %dl
+    mov %dl, (%edi)
+    inc %eax
+    inc %edi
+    cmp $0, %dl
+    jne telemetry_invalid_while
 telemetry_end:
     pop %edi                # ripristino i registri
     pop %esi
