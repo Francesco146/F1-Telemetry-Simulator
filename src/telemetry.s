@@ -5,15 +5,15 @@ invalid_pilot_str:
     .string "Invalid\n\0"
     
 counter_speed: .long 0
-.global counter_speed
+    .global counter_speed
 sum_speed: .long 0
-.global sum_speed
+    .global sum_speed
 max_speed: .long 0
-.global max_speed
+    .global max_speed
 max_rmp: .long 0
-.global max_rmp
+    .global max_rmp
 max_temp: .long 0
-.global max_temp
+    .global max_temp
 
 .section .text
     .global telemetry
@@ -46,7 +46,7 @@ telemetry_while:
     cmp $0, %ecx
     jz telemetry_next_line
 
-    # call                  # elaboro la riga corrente
+    call process_line       # elaboro la riga corrente
     jmp telemetry_line_done
 telemetry_next_line:
     call next_line          # altrimenti passo alla riga successiva
