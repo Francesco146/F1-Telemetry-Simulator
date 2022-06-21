@@ -40,7 +40,7 @@ pilot_18_str:
 pilot_19_str:
     .string  "Valtteri Bottas\0"
 
-get_pilot_array:
+pilots_array:
     .long pilot_0_str
     .long pilot_1_str
     .long pilot_2_str
@@ -60,7 +60,7 @@ get_pilot_array:
     .long pilot_16_str
     .long pilot_17_str
     .long pilot_18_str
-get_pilot_array_end:
+pilots_array_end:
     .long pilot_19_str
 
 .section .text
@@ -70,23 +70,24 @@ get_pilot_array_end:
 # Output in %EBX
 .type get_pilot, @function
 get_pilot:
-    lea get_pilot_array_end, %ebx # metto in %EBX l'indirizzo del puntatore all'ultima stringa
+    lea pilots_array_end, %ebx    # metto in %EBX l'indirizzo del puntatore all'ultima stringa
     mov $10, %dl                  # \n per il fine riga
 
-get_pilot_while:
-    mov (%ebx), %eax             # metto in %EAX l'indirizzo della stringa puntata da %EBX
-    call are_strings_equal       # confronto %ESI ed %EAX
-    cmp $1, %ecx                 # se ritorna 1 ho trovato il mio pilota
-    je get_pilot_trovato
+while:
+    mov (%ebx), %eax              # metto in %EAX l'indirizzo della stringa puntata da %EBX
+    call are_strings_equal        # confronto %ESI ed %EAX
+    cmp $1, %ecx                  # se ritorna 1 ho trovato il mio pilota
+    je trovato
 
-    sub $4, %ebx                 # altrimenti decremento il puntatore
-    cmp $get_pilot_array, %ebx   # controllo se mi rimangono stringhe
-    jge get_pilot_while
+    sub $4, %ebx                  # altrimenti decremento il puntatore
+    cmp $pilots_array, %ebx       # controllo se mi rimangono stringhe
+    jge while
 
-    mov $-1, %ebx                # pilota non trovato
-    jmp get_pilot_end
-get_pilot_trovato:                # ricavo l'id in %EBX
-    sub $get_pilot_array, %ebx    # sottraggo l'inizio
-    shr $2, %ebx                  # divido per sizeof (shift di 2)
-get_pilot_end:
+    mov $-1, %ebx                 # pilota non trovato
+    jmp end
+trovato:                          # ricavo l'id in %EBX
+    sub $pilots_array, %ebx       # sottraggo dall'indirizzo dell'elemento dell'array
+                                  # l'indirizzo del primo elemento dell'array
+    shr $2, %ebx                  # divido per sizeof long, ovvero shift di 2
+end:
     ret

@@ -4,21 +4,21 @@ pilot_id:
 invalid_pilot_str:	
     .string "Invalid\n\0"
     
-counter_speed: .long 0
-    .global counter_speed
-sum_speed: .long 0
-    .global sum_speed
-max_speed: .long 0
-    .global max_speed
-max_rmp: .long 0
-    .global max_rmp
-max_temp: .long 0
-    .global max_temp
+counter_speed: .global counter_speed
+    .long 0
+sum_speed: .global sum_speed
+    .long 0
+max_speed: .global max_speed
+    .long 0
+max_rpm: .global max_rpm
+    .long 0
+max_temp: .global max_temp
+    .long 0
 
 .section .text
     .global telemetry
 telemetry:
-    push %ebp               # salvo il valore di %EBP
+    push %ebp               # salvo il valore di %EBP (base pointer)
     mov %esp, %ebp
     push %eax               # salvo gli altri registri
     push %ebx
@@ -27,11 +27,11 @@ telemetry:
     push %esi
     push %edi
 
-    mov 8(%ebp), %esi       # carico l'input in %ESI
+    mov 8(%ebp), %esi       # carico l'indirizzo dell'input in %ESI
 
     call get_pilot          # ricavo l'id pilota in %EBX
     cmp $0, %ebx
-    jl telemetry_invalid
+    jl pilot_is_invalid
 
     lea pilot_id, %edi      # carico in %EDI l'indirizzo di destinazione
     call int2str            # converto l'id in stringa
@@ -56,19 +56,21 @@ telemetry_line_done:
     jne telemetry_while
 
     call output_max_avg     # stampo massimi e media
+    movb $0, (%edi)         # aggiungo '\0'
 
     jmp telemetry_end
-telemetry_invalid:
+
+pilot_is_invalid:
     mov 12(%ebp), %edi      # carico l'output in %EDI
-                            # stampo pilota non valido
     lea invalid_pilot_str, %eax
-telemetry_invalid_while:
+while_print_invalid:        # copio char per char "Invalid" in output
     mov (%eax), %dl
     mov %dl, (%edi)
     inc %eax
     inc %edi
     cmp $0, %dl
-    jne telemetry_invalid_while
+    jne while_print_invalid
+
 telemetry_end:
     pop %edi                # ripristino i registri
     pop %esi

@@ -9,25 +9,25 @@ are_strings_equal:
     push %ebx
     push %edx
     xor %ecx, %ecx
-are_strings_equal_while:
+while:
     mov (%eax, %ecx, 1), %bl
     mov (%esi, %ecx, 1), %dl
     cmp $0, %bl                 # se sono alla fine di %EAX
-    je are_strings_equal_maybe  # controllo che %ESI sia terminata da %DL
+    je maybe                    # controllo che %ESI sia terminata da %DL
     cmp %bl, %dl                # se invece i caratteri sono diversi
-    jne are_strings_equal_false # le stringhe sono diverse
+    jne false                   # le stringhe sono diverse
     inc %ecx                    # altrimenti passo al carattere successivo
-    jmp are_strings_equal_while
+    jmp while
 
-are_strings_equal_maybe:
+maybe:
     mov (%esp), %bl            # ripristino il terminatore in %BL
     cmp %bl, %dl
-    jne are_strings_equal_false
+    jne false
     mov $1, %ecx               # le stringhe sono uguali
-    jmp are_strings_equal_end
-are_strings_equal_false:
+    jmp end
+false:
     mov $0, %ecx               # le stringhe sono diverse
-are_strings_equal_end:
+end:
     pop %edx
     pop %ebx
     ret

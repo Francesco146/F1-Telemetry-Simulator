@@ -5,14 +5,14 @@
 .type next_line, @function
 next_line:
     mov (%esi), %bl         # copio il carattere in %BL
-    cmp $0, %bl             # controllo se sono a fine stringa
-    je next_line_end
+    cmp $0, %bl             # controllo se sono a fine input 
+    je fine_input
     cmp $10, %bl            # controllo se sono a fine riga
-    je next_line_endline
+    je fine_riga
     inc %esi                # sposto %ESI al carattere successivo
     jmp next_line
 
-next_line_endline:
-    inc %esi                # elimino il fine riga
-next_line_end:
+fine_riga:
+    inc %esi                # salto il fine riga '\n'
+fine_input:
     ret
