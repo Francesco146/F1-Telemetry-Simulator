@@ -126,16 +126,11 @@ Funzione che richiama le precedenti funzioni per implementare la specifica richi
 Ricava l’id del pilota da monitorare tramite [`get_pilot`](#get_pilot) e processa ogni riga della stringa di input tramite [`is_my_pilot`](#is_my_pilot) e [`process_line`](#process_line). Infine scrive in output i massimi e la velocità media tramite [`output_max_avg`](#output_max_avg). 
 Si occupa inoltre di gestire l’eventualità di non aver trovato il pilota da analizzare.
 
-
 # Diagramma di flusso
-![telemetry](https://github.com/TomZanna/elaborato-asm/blob/main/images/image2.jpg?raw=true)
-![process_line](https://github.com/TomZanna/elaborato-asm/blob/main/images/image4.jpg?raw=true)
-![get_pilot](https://github.com/TomZanna/elaborato-asm/blob/main/images/image3.jpg?raw=true)
-![output_max_avg](https://github.com/TomZanna/elaborato-asm/blob/main/images/image1.jpg?raw=true)
-
-
-
-
+<img align="left" src="https://github.com/TomZanna/elaborato-asm/blob/main/images/image2.png?raw=true" width="400" height="700">
+<img src="https://github.com/TomZanna/elaborato-asm/blob/main/images/image4.png?raw=true" width="300" height="800">
+<img align="left" src="https://github.com/TomZanna/elaborato-asm/blob/main/images/image3.png?raw=true" width="300" height="300">
+<img src="https://github.com/TomZanna/elaborato-asm/blob/main/images/image1.png?raw=true" width="400" height="700">
 
 # Scelte progettuali
 - Si è scelto di suddividere il programma in molteplici file per poter beneficiare della compilazione incrementale e velocizzare le compilazioni successive.
